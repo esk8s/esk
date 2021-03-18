@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: esk-example-app
+  namespace: default
+  annotations:
+    secrets.esk.io/inject-bindings: "esk-example-bind"
+spec:
+  containers:
+    - name: test
+      image: busybox
+      command:
+        - cat
+      args:
+        - /esk/secrets/esk-example-bind

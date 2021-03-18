@@ -1,0 +1,7 @@
+FROM python:3.8-alpine
+
+RUN apk update && apk upgrade && apk add py3-grpcio gcc musl-dev
+RUN mv /usr/lib/python3.8/site-packages/grpc* /usr/local/lib/python3.8/site-packages
+RUN pip install kubernetes hvac google-cloud-secret-manager boto3
+
+ENV PYTHONUNBUFFERED "1"

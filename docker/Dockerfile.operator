@@ -1,0 +1,9 @@
+FROM esk/esk-base:1.0.0
+
+RUN pip install --pre kopf
+
+COPY esk/controller /app/controller
+COPY esk/operator /app/operator
+
+WORKDIR /app/operator
+ENTRYPOINT [ "kopf", "run", "--log-format=full", "-v", "main.py", "secrets.py", "secretbindings.py" ]

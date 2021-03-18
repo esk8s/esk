@@ -1,0 +1,7 @@
+FROM esk/esk-base:1.0.0
+
+RUN pip install requests
+
+COPY esk/retriever/main.py /app/
+
+ENTRYPOINT [ "python", "/app/main.py" ]

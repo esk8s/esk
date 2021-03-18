@@ -1,0 +1,8 @@
+FROM esk/esk-base:1.0.0
+
+RUN pip install flask jsonpatch
+
+COPY esk/controller /app/controller
+COPY esk/injector /app/injector
+
+ENTRYPOINT [ "python", "/app/injector/server.py" ]
