@@ -7,7 +7,7 @@ spec:
   values: {}
   backend: ""
   path: ""
-  placeholder: bool
+  imported: bool
   maxVersions: 0
   recoveryDays: 0
   replication: ""

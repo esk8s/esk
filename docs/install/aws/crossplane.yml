@@ -1,0 +1,64 @@
+apiVersion: identity.aws.crossplane.io/v1alpha1
+kind: IAMPolicy
+metadata:
+  name: esk-injector
+  namespace: tools
+spec:
+  forProvider:
+    name: hi-dev-iam-policy-secrets-readonly
+    description: Policy for the esk injector
+    document: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:GetResourcePolicy",
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+                "secretsmanager:ListSecretVersionIds"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+---
+apiVersion: identity.aws.crossplane.io/v1beta1
+kind: IAMRole
+metadata:
+  name: esk-injector
+  namespace: tools
+spec:
+  forProvider:
+    description: Role for the esk injector
+    assumeRolePolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Federated": "arn:aws:iam::272371606098:oidc-provider/oidc.eks.eu-central-1.amazonaws.com/id/E12ACEBF76A7194701EA61FFD569905C"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+              "StringLike": {
+                "oidc.eks.eu-central-1.amazonaws.com/id/E12ACEBF76A7194701EA61FFD569905C:sub": "system:serviceaccount:tools:esk-injector"
+              }
+            }
+          }
+        ]
+      }
+---
+apiVersion: identity.aws.crossplane.io/v1beta1
+kind: IAMRolePolicyAttachment
+metadata:
+  name: esk-injector
+  namespace: tools
+spec:
+  forProvider:
+    policyArnRef:
+      name: esk-injector
+    roleNameRef:
+      name: esk-injector

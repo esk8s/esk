@@ -12,3 +12,4 @@
 - [ ] Better docs
 - [ ] Monitor a github repo for resources (gitops)
 - [ ] Support backend authorization mechanisms
+- [ ] Crossplane support

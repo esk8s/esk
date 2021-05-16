@@ -1,9 +1,9 @@
 apiVersion: esk.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: esk-aws-example
+  name: hi-dev-test-secret-1
 spec:
   backend: aws
+  source: aws_user_access
   values:
-    password: gen
-    pass: gen
+    username: hi-test-user

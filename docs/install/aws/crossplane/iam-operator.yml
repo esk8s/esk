@@ -1,0 +1,61 @@
+apiVersion: identity.aws.crossplane.io/v1alpha1
+kind: IAMPolicy
+metadata:
+  name: esk-operator
+  namespace: tools
+spec:
+  forProvider:
+    name: iam-policy-secrets-admin
+    description: Policy for the esk operator
+    document: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:*"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+---
+apiVersion: identity.aws.crossplane.io/v1beta1
+kind: IAMRole
+metadata:
+  name: esk-operator
+  namespace: tools
+spec:
+  forProvider:
+    description: Role for the esk operator
+    assumeRolePolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Federated": "arn:aws:iam::${ACCOUNT_ID}:oidc-provider/oidc.eks.eu-central-1.amazonaws.com/id/${OIDC_PROVIDER}"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+              "StringLike": {
+                "oidc.eks.eu-central-1.amazonaws.com/id/${OIDC_PROVIDER}:sub": "system:serviceaccount:tools:esk-operator"
+              }
+            }
+          }
+        ]
+      }
+---
+apiVersion: identity.aws.crossplane.io/v1beta1
+kind: IAMRolePolicyAttachment
+metadata:
+  name: esk-operator
+  namespace: tools
+spec:
+  forProvider:
+    policyArnRef:
+      name: esk-operator
+    roleNameRef:
+      name: esk-operator

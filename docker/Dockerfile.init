@@ -1,4 +1,4 @@
-FROM esk/esk-base:1.0.0
+FROM esk8s/esk-base:1.0.0
 
 RUN pip install requests
 
